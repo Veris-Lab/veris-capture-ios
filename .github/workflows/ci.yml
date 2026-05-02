@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build and lint
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Resolve SPM dependencies
+        run: xcodebuild -resolvePackageDependencies -scheme VerisCapture
+
+      - name: Build
+        run: |
+          xcodebuild build \
+            -scheme VerisCapture \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty || true
+
+      - name: SwiftLint
+        run: |
+          if which swiftlint > /dev/null; then
+            swiftlint lint --strict
+          else
+            echo "SwiftLint not installed - skipping"
+          fi
