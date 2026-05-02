@@ -1,6 +1,6 @@
-[![CI](https://github.com/verisinfra/veris-capture-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/verisinfra/veris-capture-ios/actions/workflows/ci.yml)
+[![CI](https://github.com/Veris-Lab/veris-capture-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/Veris-Lab/veris-capture-ios/actions/workflows/ci.yml)
 [![CocoaPods](https://img.shields.io/cocoapods/v/VerisCapture.svg)](https://cocoapods.org/pods/VerisCapture)
-[![SPM compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/verisinfra/veris-capture-ios)
+[![SPM compatible](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://github.com/Veris-Lab/veris-capture-ios)
 [![License](https://img.shields.io/badge/license-Commercial-lightgrey.svg)](https://verisinfra.com/legal/sdk-license)
 [![iOS 15+](https://img.shields.io/badge/iOS-15%2B-blue.svg)]()
 
@@ -30,14 +30,14 @@ No face image ever leaves the device. Every result is cryptographically signed (
 In Xcode: File > Add Package Dependencies
 
 ```
-https://github.com/verisinfra/veris-capture-ios
+https://github.com/Veris-Lab/veris-capture-ios
 ```
 
 Or in `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/verisinfra/veris-capture-ios.git", from: "1.0.0")
+    .package(url: "https://github.com/Veris-Lab/veris-capture-ios.git", from: "1.0.0")
 ]
 ```
 
