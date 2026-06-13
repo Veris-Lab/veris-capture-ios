@@ -13,7 +13,7 @@ No face image ever leaves the device. Requires a valid Veris subscription.
 
   # CocoaPods trunk requires a git + tag source (not :path)
   s.source           = {
-    :git => "https://github.com/verisinfra/veris-capture-ios.git",
+    :git => "https://github.com/Veris-Lab/veris-capture-ios.git",
     :tag => s.version.to_s
   }
 
