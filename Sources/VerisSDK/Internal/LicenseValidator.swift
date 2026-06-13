@@ -38,7 +38,11 @@ enum LicenseValidator {
             return
         }
 
-        let body: [String: Any] = [
+        // Ensure the per-install signing key exists before the first server contact.
+        // The public key is registered on the backend so it can later verify signed results.
+        DeviceKeyStore.ensureKeyPair()
+
+        var body: [String: Any] = [
             "license_key": config.licenseKey,
             "package_name": bundleId,
             "platform": "ios",
@@ -46,6 +50,11 @@ enum LicenseValidator {
             "session_nonce": config.initNonce,
             "timestamp": ISO8601DateFormatter().string(from: Date()),
         ]
+        if let pubKeyPem = DeviceKeyStore.publicKeyPem() {
+            body["device_public_key"] = pubKeyPem
+            body["device_key_id"]     = DeviceKeyStore.publicKeyId()
+            body["hardware_backed"]   = DeviceKeyStore.isHardwareBacked
+        }
 
         guard let bodyData = try? JSONSerialization.data(withJSONObject: body) else {
             completion(.error("Failed to encode validation request"))
@@ -157,7 +166,7 @@ enum LicenseValidator {
         let inGracePeriod = now > expiresAt && now <= graceExpiresAt
         let graceHours = max(0, Int(graceExpiresAt.timeIntervalSince(expiresAt) / 3600))
 
-        return VerisLicenseInfo(
+        var info = VerisLicenseInfo(
             clientId: json["client_id"] as? String ?? "",
             plan: plan,
             features: VerisFeatureFlags(
@@ -174,6 +183,9 @@ enum LicenseValidator {
             inGracePeriod: inGracePeriod,
             gracePeriodHours: graceHours
         )
+        info.environment  = json["environment"]   as? String ?? "production"
+        info.licenseKeyId = json["license_key_id"] as? String ?? ""
+        return info
     }
 
     private enum CacheStatus { case active, grace, expired }
@@ -254,8 +266,8 @@ final class FeatureFlagManager {
     }
 }
 
-// MARK: - SDK Version
-
-enum SDKVersion {
-    static let current = "1.0.0"
+// SDKVersion is a legacy alias kept so LicenseValidator's call site compiles.
+// The canonical constant is VerisSDKVersion in VerisResultSigner.swift.
+private enum SDKVersion {
+    static let current = VerisSDKVersion.current
 }

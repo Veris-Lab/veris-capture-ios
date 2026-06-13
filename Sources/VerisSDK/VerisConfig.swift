@@ -59,6 +59,10 @@ public struct VerisSessionConfig {
     public var minQualityScore: Float
     /// Minimum stable frames before capture.
     public var minStabilityFrames: Int
+    /// Pro/Enterprise only: number of liveness challenge rounds (2–4). Clamped by the SDK.
+    public var proRandomChallengeCount: Int
+    /// Pro/Enterprise only: force active liveness even when passive evidence already passed.
+    public var enforceChallenge: Bool
 
     public init(
         nonce: String,
@@ -67,7 +71,9 @@ public struct VerisSessionConfig {
         maxRetries: Int = 3,
         sessionTimeoutSecs: Int = 60,
         minQualityScore: Float = 0.70,
-        minStabilityFrames: Int = 5
+        minStabilityFrames: Int = 5,
+        proRandomChallengeCount: Int = 2,
+        enforceChallenge: Bool = false
     ) {
         self.nonce = nonce
         self.userId = userId
@@ -76,6 +82,8 @@ public struct VerisSessionConfig {
         self.sessionTimeoutSecs = sessionTimeoutSecs
         self.minQualityScore = minQualityScore
         self.minStabilityFrames = minStabilityFrames
+        self.proRandomChallengeCount = proRandomChallengeCount
+        self.enforceChallenge = enforceChallenge
     }
 }
 
@@ -138,6 +146,8 @@ public struct VerisLicenseInfo {
     public let graceExpiresAt: Date
     public let inGracePeriod: Bool
     public let gracePeriodHours: Int
+    public var environment: String = "production"
+    public var licenseKeyId: String = ""
 }
 
 // MARK: - Init Results

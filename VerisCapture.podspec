@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name             = "VerisCapture"
-  s.version          = "1.0.0"
+  s.version          = "1.2.0"
   s.summary          = "On-device face capture with liveness detection for iOS."
   s.description      = <<-DESC
 Native iOS SDK for Veris on-device face capture with quality gate and liveness detection.
-Passive liveness (LBP), active dot-follow challenges, and ECDSA-signed result payloads.
+Passive liveness (LBP), active liveness challenges (head turn, blink, nod), and ECDSA-signed result payloads.
 No face image ever leaves the device. Requires a valid Veris subscription.
                        DESC
   s.homepage         = "https://verisinfra.com"

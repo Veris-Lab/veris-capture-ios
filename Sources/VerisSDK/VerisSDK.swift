@@ -93,12 +93,21 @@ import UIKit
 
         let features = featureFlagManager.currentFlags ?? config.fallbackFeatures
         let plan = CapturePlan.resolve(features: features)
-        let sessionContext = SessionContext(
+        let licenseInfo: VerisLicenseInfo? = {
+            switch subscriptionState {
+            case .active(let i), .gracePeriod(let i): return i
+            default: return nil
+            }
+        }()
+        var sessionContext = SessionContext(
             nonce: session.nonce,
             plan: plan,
             maxRetries: session.maxRetries,
             strictness: session.strictness
         )
+        sessionContext.environment    = licenseInfo?.environment  ?? (config.environment == .sandbox ? "sandbox" : "production")
+        sessionContext.licenseKeyId   = licenseInfo?.licenseKeyId ?? ""
+        sessionContext.validationState = licenseInfo != nil ? "verified" : "unverified_offline"
         let stateManager = StateManager()
         let pipelineCoordinator = PipelineCoordinator(
             context: sessionContext,
