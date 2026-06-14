@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "VerisCapture"
-  s.version          = "1.2.0"
+  s.version          = "1.3.0"
   s.summary          = "On-device face capture with liveness detection for iOS."
   s.description      = <<-DESC
 Native iOS SDK for Veris on-device face capture with quality gate and liveness detection.

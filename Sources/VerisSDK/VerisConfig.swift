@@ -92,20 +92,45 @@ public enum VerisStrictness { case low, medium, high }
 // MARK: - Feature Flags
 
 /// Remotely-delivered feature flags for the authenticated client plan.
+///
+/// Field set mirrors the Android `VerisFeatureFlags` data class so every
+/// cross-platform bridge (Flutter, React Native) serialises an identical
+/// payload regardless of host OS.
 public struct VerisFeatureFlags {
+    // ── Capture ──────────────────────────────────────────────────────────────
     public var faceCapture: Bool
     public var qualityChecks: Bool
     public var voiceInstructions: Bool
     public var humanValidation: Bool
+    public var facialLandmarkAnalysis: Bool
     public var passiveLiveness: Bool
     public var activeLiveness: Bool
+    public var activeLivenessChallenges: Int
     public var activeLivenessConfigurable: Bool
     public var videoCapture: Bool
+    public var advancedConfig: Bool
+    /// True when Veris-only branding is enforced on the capture UI (server `capture_branding == "required"`).
+    public var captureBranding: Bool
+    /// nil = unlimited.
+    public var captureMonthlyLimit: Int?
+    // ── Scan ─────────────────────────────────────────────────────────────────
+    public var scanEnabled: Bool
+    /// nil = unlimited.
+    public var scanMonthlyLimit: Int?
+    // ── Compare ──────────────────────────────────────────────────────────────
+    public var compare: Bool
+    public var compareQuotaRemaining: Int
+    public var compareQuotaMonthly: Int
 
-    /// Default features for Starter plan (safe fallback if network is unavailable).
+    /// Default features for Starter/Spark plan (safe fallback if network is unavailable).
     public static let starter = VerisFeatureFlags(
         faceCapture: true, qualityChecks: true, voiceInstructions: true,
-        humanValidation: false, passiveLiveness: false, activeLiveness: false, activeLivenessConfigurable: false, videoCapture: false
+        humanValidation: false, facialLandmarkAnalysis: false,
+        passiveLiveness: false, activeLiveness: false, activeLivenessChallenges: 0,
+        activeLivenessConfigurable: false, videoCapture: false, advancedConfig: false,
+        captureBranding: true, captureMonthlyLimit: nil,
+        scanEnabled: false, scanMonthlyLimit: nil,
+        compare: false, compareQuotaRemaining: 0, compareQuotaMonthly: 0
     )
 
     public init(
@@ -113,19 +138,39 @@ public struct VerisFeatureFlags {
         qualityChecks: Bool = true,
         voiceInstructions: Bool = true,
         humanValidation: Bool = false,
+        facialLandmarkAnalysis: Bool = false,
         passiveLiveness: Bool = false,
         activeLiveness: Bool = false,
+        activeLivenessChallenges: Int = 0,
         activeLivenessConfigurable: Bool = false,
-        videoCapture: Bool = false
+        videoCapture: Bool = false,
+        advancedConfig: Bool = false,
+        captureBranding: Bool = true,
+        captureMonthlyLimit: Int? = nil,
+        scanEnabled: Bool = false,
+        scanMonthlyLimit: Int? = nil,
+        compare: Bool = false,
+        compareQuotaRemaining: Int = 0,
+        compareQuotaMonthly: Int = 0
     ) {
         self.faceCapture = faceCapture
         self.qualityChecks = qualityChecks
         self.voiceInstructions = voiceInstructions
         self.humanValidation = humanValidation
+        self.facialLandmarkAnalysis = facialLandmarkAnalysis
         self.passiveLiveness = passiveLiveness
         self.activeLiveness = activeLiveness
+        self.activeLivenessChallenges = activeLivenessChallenges
         self.activeLivenessConfigurable = activeLivenessConfigurable
         self.videoCapture = videoCapture
+        self.advancedConfig = advancedConfig
+        self.captureBranding = captureBranding
+        self.captureMonthlyLimit = captureMonthlyLimit
+        self.scanEnabled = scanEnabled
+        self.scanMonthlyLimit = scanMonthlyLimit
+        self.compare = compare
+        self.compareQuotaRemaining = compareQuotaRemaining
+        self.compareQuotaMonthly = compareQuotaMonthly
     }
 }
 

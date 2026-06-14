@@ -126,6 +126,6 @@ internal enum VerisResultSigner {
 // MARK: - SDK version constants
 
 internal enum VerisSDKVersion {
-    static let current = "1.2.0"
-    static let build   = 2
+    static let current = "1.3.0"
+    static let build   = 3
 }
